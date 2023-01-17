@@ -12,8 +12,8 @@ const swaggerOptions = {
             servers: ["htt[://localhost:3500"]
         }
     },
-    // Where routes are found ex: ['.routes/*.js]
-    apis: []
+   
+    apis: ['.routes/*.js']
 }
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions)

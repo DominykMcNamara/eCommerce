@@ -17,3 +17,7 @@ passport.deserializeUser((user, cb) => {
     return cb(null, user);
   });
 });
+
+const authenticate = passport.authenticate('local', {failureRedirect: '/', failureMessage: true })
+const authenticateSession = passport.authenticate('session')
+module.exports ={ authenticate, authenticateSession }

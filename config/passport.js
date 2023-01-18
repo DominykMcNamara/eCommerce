@@ -1,20 +1,18 @@
 const db = require ('../db/index')
 const passport = require('passport')
 const LocalStrategy = require('passport-local');
-var crypto = require('crypto');
-
+const bcrypt = require('bcrypt')
 passport.use(new LocalStrategy(function verify(username, password, done) {
+    
     db.query('SELECT * FROM user WHERE username = $1', [username], (err, row) => {
         if (err) { return done(err)}
         if (!row) { return done(null, false, { message: 'Incorrect username or password'})}
 
-        crypto.pbkdf2(password, row.salt, 310000, 32, 'sha256', (err, hashedPassword) => {
-            if (err) { return done(err)}
-            if(!crypto.timingSafeEqual(row.password, hashedPassword)) {
-                return done(null, false, { message: 'Incorrect username or password.' })
-            }
-            return done(null, row)
-        })
+       bcrypt.compare(password, row.password, (err, result) => {
+        if (err) { return done(err) }
+        if (!result) { return done(null, false, { message: 'Incorrect username or password'})}
+       })
+       return done(null, user)
     })
 }))
 

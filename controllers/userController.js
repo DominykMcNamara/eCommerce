@@ -1,2 +1,2 @@
-const db = require('../config/Prisma')
+const db = require('../db/index')
 

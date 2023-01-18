@@ -8,6 +8,7 @@ const session = require('express-session')
 const corsOptions = require("./config/corsOptions")
 const swaggerUi = require('swagger-ui-express')
 const swaggerDocs = require('./config/Swagger')
+const authenticateSession = require('./middleware/passport')
 const PORT = process.env.PORT || 3500
 
 app.use(bodyParser.json())
@@ -20,5 +21,6 @@ app.use(session({
     saveUninitialized: false,
     cookie: { secure: true }
 }))
+app.use(authenticateSession)
 
 app.listen(PORT, () => console.log(`Server running on ${ PORT }.`))

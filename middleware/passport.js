@@ -18,6 +18,12 @@ passport.deserializeUser((user, cb) => {
   });
 });
 
-const authenticate = passport.authenticate('local', {failureRedirect: '/', failureMessage: true })
-const authenticateSession = passport.authenticate('session')
-module.exports ={ authenticate, authenticateSession }
+const authenticate = (next) => {
+  passport.authenticate("local", {
+    failureRedirect: "/",
+    failureMessage: true,
+  });
+  next()
+};
+const authenticateSession = passport.authenticate("session");
+module.exports = { authenticate, authenticateSession };

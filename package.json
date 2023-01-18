@@ -16,11 +16,9 @@
   "author": "Dominyk McNamara",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^2.0.20",
-    "prisma": "^4.9.0"
+    "nodemon": "^2.0.20"
   },
   "dependencies": {
-    "@prisma/client": "^4.9.0",
     "body-parser": "^1.20.1",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",

@@ -1,5 +1,5 @@
 const db = require("../db/index");
-
+const bcrypt = require('bcrypt')
 const handleNewUser = async (req, res) => {
   const { username, email, password } = req.body;
   if ((!username || !email, !password)) {
@@ -7,22 +7,24 @@ const handleNewUser = async (req, res) => {
       .status(400)
       .json({ message: "Username, Email, and Password are required." });
   }
+  const  hashedPassword = await bcrypt.hash(password, 10)
+
   try {
-    const { newUser } = db.query(
-      "INSERT INTO user (username, email, password) VALUES($1, $2, $3)",
+    db.query(
+      'INSERT INTO "User"(username, email, password) VALUES($1, $2, $3)',
       [username, hashedPassword, email],
       (err, rows) => {
         if (err) {
           return res.status(404).json({ message: err.message });
         }
         if (rows) {
-          return res.status(201).json({ message: rows });
+          return res.status(201).send(rows);
         }
       }
     );
   } catch (err) {
-    res.sendStatus(500).json({ message: err.message });
+    res.status(500).json({ message: err.message });
   }
 };
 
-module.exports = { handleNewUser }
+module.exports = { handleNewUser };

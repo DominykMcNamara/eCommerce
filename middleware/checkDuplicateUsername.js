@@ -1,12 +1,12 @@
 const db = require('../db/index')
 
-const checkDuplicateUsernames = async (req, res, next) => {
-    const { username } = req.body
-    if (!username) {
+const checkDuplicateUsernames = (req, res, next) => {
+    if (!req.body.username) {
         return res.status(400).json({ message: "Username is required."})
     }
+    console.log(req.body)
     try {
-        db.query('SELECT * FROM user WHERE username = 1$', [username], (err, rows) => {
+        db.query('SELECT * FROM user WHERE username = 1$', [req.body.username], (err, rows) => {
             if (err) { return res.status(404).json({ message: err.message })}
             if (rows) {return res.status(409).json({ message: 'Username already exists.'})}
         })
@@ -16,5 +16,5 @@ const checkDuplicateUsernames = async (req, res, next) => {
     next()
 }
 
-module.exports = {checkDuplicateUsernames}
+module.exports = checkDuplicateUsernames
 

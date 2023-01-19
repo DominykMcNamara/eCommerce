@@ -14,15 +14,16 @@ const checkDuplicateUsernames = (req, res, next) => {
           return res.json({ message: err.message });
         }
         if (rows.rows.length !== 0) {
-          return res.json({ message: "Username already exists." });
+          return res.status(409).json({ message: "Username already exists." });
+        } else {
+          next()
         }
-        console.log(rows);
       }
     );
   } catch (err) {
     return res.json({ message: err.message });
   }
-  next();
+  
 };
 
 module.exports = checkDuplicateUsernames;

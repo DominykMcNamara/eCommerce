@@ -1,5 +1,5 @@
 const db = require("../db/index");
-const bcrypt = require('bcrypt')
+const bcrypt = require("bcrypt");
 const handleNewUser = async (req, res) => {
   const { username, email, password } = req.body;
   if ((!username || !email, !password)) {
@@ -7,7 +7,7 @@ const handleNewUser = async (req, res) => {
       .status(400)
       .json({ message: "Username, Email, and Password are required." });
   }
-  const  hashedPassword = await bcrypt.hash(password, 10)
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   try {
     db.query(

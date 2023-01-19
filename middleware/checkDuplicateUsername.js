@@ -2,7 +2,7 @@ const db = require("../db/index");
 
 const checkDuplicateUsernames = (req, res, next) => {
   if (!req.body.username) {
-    return res.status(400).json({ message: "Username is required." });
+    return res.json({ message: "Username is required." });
   }
   console.log(req.body);
   try {
@@ -11,18 +11,18 @@ const checkDuplicateUsernames = (req, res, next) => {
       [req.body.username],
       (err, rows) => {
         if (err) {
-          return res.status(404).json({ message: err.message });
+          return res.json({ message: err.message });
         }
-        if (rows) {
-          return res.status(409).json({ message: "Username already exists." });
+        if (rows.rows.length !== 0) {
+          return res.json({ message: "Username already exists." });
         }
+        console.log(rows);
       }
     );
-    next();
   } catch (err) {
-    res.sendStatus(500).json({ message: err.message });
-    next();
+    return res.json({ message: err.message });
   }
+  next();
 };
 
 module.exports = checkDuplicateUsernames;

@@ -45,7 +45,6 @@ const updateSingleUser = async (req, res) => {
       [username, hashedPassword, id],
       (err, rows) => {
         if (rows) {
-          console.log(rows);
           return res.status(202).json({ message: `User ${id} updated.` });
         }
       }

@@ -14,9 +14,6 @@ const handleNewUser = async (req, res) => {
       'INSERT INTO "User"(username, password, email) VALUES($1, $2, $3)',
       [username, hashedPassword, email],
       (err, rows) => {
-        if (err) {
-          return res.status(404).json({ message: err.message });
-        }
         if (rows) {
           return res.status(201).json({ message: `User with username ${username} created!`});
         }

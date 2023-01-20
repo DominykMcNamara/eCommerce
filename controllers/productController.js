@@ -61,4 +61,17 @@ const updateProduct = async (req, res) => {
     }
 }
 
-module.exports = { getAllProducts, getSingleProduct, createProduct, updateProduct };
+const deleteSingleProduct = async (req, res) => {
+    const { id } = req.params
+    try {
+        db.query('DELETE FROM "Product" WHERE id = $1', [id], (err, rows) => {
+            if (rows) {
+                return res.status(202).json({ message: `Product ${id} deleted.` }); 
+            }
+        })
+    } catch (err) {
+        return res.status(404).json({ message: err.message })
+    }
+}
+
+module.exports = { getAllProducts, getSingleProduct, createProduct, updateProduct, deleteSingleProduct };

@@ -56,9 +56,6 @@ const updateSingleUser = async (req, res) => {
 
 const deleteSingleUser = async (req, res) => {
   const { id } = req.params;
-  if (!id) {
-    res.status(404).json({ message: "Please add an id URL parameter" });
-  }
   try {
     db.query('DELETE FROM "User" WHERE id = $1', [id], (err, rows) => {
       if (rows) {

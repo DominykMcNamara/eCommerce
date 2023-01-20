@@ -11,7 +11,7 @@ const handleNewUser = async (req, res) => {
 
   try {
     db.query(
-      'INSERT INTO "User"(username, email, password) VALUES($1, $2, $3)',
+      'INSERT INTO "User"(username, password, email) VALUES($1, $2, $3)',
       [username, hashedPassword, email],
       (err, rows) => {
         if (err) {

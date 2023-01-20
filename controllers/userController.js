@@ -4,11 +4,10 @@ const bcrypt = require("bcrypt");
 const getAllUsers = async (req, res) => {
   try {
     db.query('SELECT username, email FROM "User"', (err, rows) => {
-      if (err) {
-        return res.status(404).json({ message: err.message });
-      }
       if (rows.rows.length === 0) {
-        return res.status(200).json({ message: 'There are currently no users'})
+        return res
+          .status(200)
+          .json({ message: "There are currently no users" });
       }
       if (rows) {
         return res.status(200).json({ users: rows.rows });
@@ -26,12 +25,6 @@ const getSingleUser = async (req, res) => {
       'SELECT username, email FROM "User" WHERE id = $1',
       [id],
       (err, rows) => {
-        if (err) {
-          return res.status(404).json({ message: err.message });
-        }
-        if (rows.rows.length === 0) {
-          return res.status(404).json({ message: `User ${id} cannot be found` })
-        }
         if (rows) {
           return res.status(202).json({ user: rows.rows[0] });
         }
@@ -51,12 +44,6 @@ const updateSingleUser = async (req, res) => {
       'UPDATE "User" SET username = $1, password = $2 WHERE id = $3',
       [username, hashedPassword, id],
       (err, rows) => {
-        if (err) {
-          return res.status(404).json({ message: err.message });
-        }
-        if (rows.rows.length === 0) {
-          return res.status(404).json({ message: `User ${id} cannot be found` })
-        }
         if (rows) {
           console.log(rows);
           return res.status(202).json({ message: `User ${id} updated.` });
@@ -75,12 +62,6 @@ const deleteSingleUser = async (req, res) => {
   }
   try {
     db.query('DELETE FROM "User" WHERE id = $1', [id], (err, rows) => {
-      if (err) {
-        return res.status(404).json({ message: err.message });
-      }
-      if (rows.rows.length === 0) {
-        return res.status(404).json({ message: `User ${id} cannot be found` })
-      }
       if (rows) {
         return res.status(202).json({ message: `User ${id} deleted.` });
       }

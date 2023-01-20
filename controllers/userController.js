@@ -7,7 +7,7 @@ const getAllUsers = async (req, res) => {
       if (rows.rows.length === 0) {
         return res
           .status(200)
-          .json({ message: "There are currently no users" });
+          .json({ message: "There are currently no users." });
       }
       if (rows) {
         return res.status(200).json({ users: rows.rows });

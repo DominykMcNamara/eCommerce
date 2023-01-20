@@ -18,7 +18,7 @@ const handleNewUser = async (req, res) => {
           return res.status(404).json({ message: err.message });
         }
         if (rows) {
-          return res.status(201).send(rows);
+          return res.status(201).json({ message: `User with username ${username} created!`});
         }
       }
     );

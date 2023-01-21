@@ -28,19 +28,20 @@ passport.use(
             });
           }
         });
-       
-        return done(null, row);
+        console.log('Welcome!')
+        return done(null, row.rows[0]);
       }
     );
   })
 );
 
 passport.serializeUser((user, done) => {
-  return done(null, user);
+  console.log(user)
+  return done(null, user.id);
 });
 
 passport.deserializeUser((id, done) => {
   db.query('SELECT * FROM "User" WHERE id = $1', [id], (user) => {
-    return done(null, user);
+    return done(null, id);
   });
 });

@@ -3,8 +3,8 @@ const passport = require('passport')
 require('../config/passport')
 const router = new Router()
 
-router.post('/password', passport.authenticate('local', {
-    successRedirect: '/password',
+router.post('/', passport.authenticate('local', {
+    successRedirect: '/products',
     failureRedirect: '/register'
 }))
 

@@ -11,6 +11,7 @@ const session = require("express-session");
 const passport = require("passport");
 const db = require("./db/index");
 const pgSession = require("connect-pg-simple")(session);
+const sessionLogger = require('./middleware/sessionLogger')
 require("./config/passport");
 
 app.use(
@@ -38,11 +39,8 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use((req, res, next) => {
-  console.log(req.session);
-  console.log(req.user);
-  next();
-});
+app.use(sessionLogger)
+
 
 mountRoutes(app);
 

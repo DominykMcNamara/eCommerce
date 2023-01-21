@@ -28,7 +28,6 @@ passport.use(
             });
           }
         });
-        console.log('Welcome!')
         return done(null, row.rows[0]);
       }
     );

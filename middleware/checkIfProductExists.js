@@ -2,7 +2,7 @@ const db = require("../db/index");
 
 const checkIfProductExists = async (req, res, next) => {
     try {
-      db.query(
+      req.product = db.query(
         'SELECT * FROM "User" WHERE id = $1',
         [req.params.id],
         (err, rows) => {

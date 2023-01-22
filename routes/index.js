@@ -5,4 +5,5 @@ module.exports = (app) => {
    app.use('/logout', [isAuthenticated], require('./logout'))
    app.use('/users', [isAuthenticated], require('./users'))
    app.use('/products', require('./products'))
+   app.use('/carts', [isAuthenticated], require('./carts'))
 }

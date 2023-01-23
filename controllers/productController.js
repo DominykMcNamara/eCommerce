@@ -2,7 +2,7 @@ const db = require("../db/index");
 
 const getAllProducts = async (req, res) => {
   try {
-    db.query('SELECT * FROM "Product"', (err, rows) => {
+    db.query('SELECT * FROM Products', (err, rows) => {
       if (rows.rows.length === 0) {
         return res
           .status(200)

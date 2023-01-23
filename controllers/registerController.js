@@ -1,21 +1,26 @@
 const db = require("../db/index");
 const bcrypt = require("bcrypt");
 const handleNewUser = async (req, res) => {
-  const { username, email, password } = req.body;
-  if ((!username || !email, !password)) {
-    return res
-      .status(400)
-      .json({ message: "Username, Email, and Password are required." });
+  console.log(req.body)
+  const { first_name, last_name, username, email, password } = req.body;
+  if (!first_name || !last_name || !username || !email || !password) {
+    return res.status(400).json({
+      message:
+        "First Name, Last Name, Username, Email and Password are required.",
+    });
   }
-  const hashedPassword = await bcrypt.hash(password, 10);
 
+  const hashedPassword = await bcrypt.hash(password, 10);
+  
   try {
     db.query(
-      'INSERT INTO "User"(username, password, email) VALUES($1, $2, $3)',
-      [username, hashedPassword, email],
+      'INSERT INTO userssddd(first_name, last_name, username, password, email) VALUES($1, $2, $3, $4, $5)',
+      [first_name, last_name, username, hashedPassword, email],
       (err, rows) => {
         if (rows) {
-          return res.status(201).json({ message: `User with username ${username} created!`});
+          return res
+            .status(201)
+            .json({ message: `User with username ${username} created!` });
         }
       }
     );

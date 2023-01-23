@@ -3,7 +3,7 @@ const db = require("../db/index");
 const checkIfUserExists = async (req, res, next) => {
   try {
     db.query(
-      'SELECT * FROM "User" WHERE id = $1',
+      'SELECT * FROM users WHERE id = $1',
       [req.params.id],
       (err, rows) => {
         if (rows.rows.length === 0) {

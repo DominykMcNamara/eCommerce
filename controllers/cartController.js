@@ -3,7 +3,7 @@ const db = require("../db/index");
 const getAllUsersCarts = async (req, res) => {
   try {
     db.query(
-      'SELECT * FROM "Cart" WHERE userId = $1',
+      'SELECT * FROM "Carts" WHERE userId = $1',
       [req.user],
       (err, rows) => {
         if (!rows) {

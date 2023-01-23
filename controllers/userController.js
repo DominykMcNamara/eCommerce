@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 
 const getAllUsers = async (req, res) => {
   try {
-    db.query('SELECT username, email FROM "User"', (err, rows) => {
+    db.query('SELECT first_name, last_name, username, email FROM users', (err, rows) => {
       if (rows.rows.length === 0) {
         return res
           .status(200)
@@ -22,7 +22,7 @@ const getSingleUser = async (req, res) => {
   const { id } = req.params;
   try {
     db.query(
-      'SELECT username, email FROM "User" WHERE id = $1',
+      'SELECT first_name, last_name, username, email FROM users WHERE id = $1',
       [id],
       (err, rows) => {
         if (rows) {
@@ -41,7 +41,7 @@ const updateSingleUser = async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, 10);
   try {
     db.query(
-      'UPDATE "User" SET username = $1, password = $2 WHERE id = $3',
+      'UPDATE users SET first_name = $1, last_name = $2, username = $3 password = $4 WHERE id = $5',
       [username, hashedPassword, id],
       (err, rows) => {
         if (rows) {
@@ -57,7 +57,7 @@ const updateSingleUser = async (req, res) => {
 const deleteSingleUser = async (req, res) => {
   const { id } = req.params;
   try {
-    db.query('DELETE FROM "User" WHERE id = $1', [id], (err, rows) => {
+    db.query('DELETE FROM users WHERE id = $1', [id], (err, rows) => {
       if (rows) {
         return res.status(202).json({ message: `User ${id} deleted.` });
       }

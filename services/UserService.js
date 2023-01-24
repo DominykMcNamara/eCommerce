@@ -15,7 +15,8 @@ module.exports = class UserService {
     }
   }
 
-  async getOneById(id) {
+  async getOneById(data) {
+    const { id } = data
     try {
       const user = await UserModelInstance.findOneById(id);
       if (!user) {

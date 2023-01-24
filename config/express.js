@@ -1,6 +1,9 @@
+require("dotenv").config();
 const cors = require("cors");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
+const sessionLogger = require('../middleware/sessionLogger')
+const errorHandler = require('../middleware/errorHandler')
 const corsOptions = require("./corsOptions");
 const session = require("express-session");
 const pgSession = require("connect-pg-simple")(session);
@@ -29,5 +32,7 @@ module.exports = (app) => {
       },
     })
   );
+  app.use(sessionLogger)
+  app.use(errorHandler)
   return app
 }

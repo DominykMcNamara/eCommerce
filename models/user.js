@@ -3,16 +3,16 @@ const pgp = require("pg-promise")({ capSQL: true });
 const bcrypt = require("bcrypt");
 module.exports = class UserModel {
   async create(data) {
-    
     try {
       const newUser = {
         first_name: data.first_name,
         last_name: data.last_name,
         username: data.username,
         password: await bcrypt.hash(data.password, 10),
-        email: data.email
-      }
-      const command = pgp.helpers.insert(newUser, null, "users") + "RETURNING *";
+        email: data.email,
+      };
+      const command =
+        pgp.helpers.insert(newUser, null, "users") + "RETURNING *";
       const results = await db.query(command);
 
       if (results.rows?.length) {
@@ -42,8 +42,8 @@ module.exports = class UserModel {
   async findOneByEmail(email) {
     try {
       const command = "SELECT * FROM users WHERE email = $1";
-      const value = [email];
-      const results = await db.query(command, value);
+      const values = [email];
+      const results = await db.query(command, values);
       if (results.rows?.length) {
         return results.rows[0];
       }

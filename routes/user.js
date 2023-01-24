@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const isAuthenticated = require('../middleware/isAuthenticated')
 const UserService = require("../services/UserService");
 const UserServiceInstance = new UserService();
 
 module.exports = (app) => {
-  app.use("/user", router);
+  app.use("/user", [isAuthenticated], router);
 
   router.get("/", async (req, res, next) => {
     try {

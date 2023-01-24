@@ -8,7 +8,7 @@ const pg = require("pg");
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
         email VARCHAR(100)  NOT NULL UNIQUE,
         username VARCHAR(50) NOT NULL UNIQUE,
-        password VARCHAR(50) NOT NULL,
+        password VARCHAR(100) NOT NULL,
         first_name VARCHAR(50) NOT NULL,
         last_name VARCHAR(50)
     );`;

@@ -1,10 +1,10 @@
 const db = require("../db");
 const pgp = require("pg-promise")({ capSQL: true });
 
-module.exports = class CartItemModel {
+module.exports = class OrderItem {
   async getAll() {
     try {
-      const command = "SELECT * FROM cart_items";
+      const command = "SELECT * FROM order_items";
       const results = await db.query(command);
       if (results.rows?.length) {
         return results.rows;
@@ -18,9 +18,9 @@ module.exports = class CartItemModel {
   async create(data) {
     try {
       const command =
-        pgp.helpers.insert(data, null, "cart_items") + "RETURNING *";
+        pgp.helpers.insert(data, null, "order_items") + "RETURNING *";
       const results = await db.query(command);
-      if (results?.rows.length) {
+      if (results?.rows?.length) {
         return results.rows[0];
       }
       return null;
@@ -32,10 +32,12 @@ module.exports = class CartItemModel {
   async update(data) {
     try {
       const { id, ...params } = data;
-      const findCartItems = pgp.format("WHERE id = ${id} RETURNING *", { id });
+      const findOrderItems = pgp.format("WHERE id = ${ id } RETURNING *", {
+        id,
+      });
       const command =
-        pgp.helpers.update(params, null, "cart_items") + findCartItems;
-      const results = await db.query(command);
+        pgp.helpers.update(params, null, "order_items") + findOrderItems;
+      const results = db.query(command);
       if (results.rows?.length) {
         return results.rows[0];
       }
@@ -47,7 +49,7 @@ module.exports = class CartItemModel {
 
   async findOneById(id) {
     try {
-      const command = "SELECT * FROM cart_items WHERE id = $1";
+      const command = "SELECT * FROM order_items WHERE id = $1";
       const value = [id];
       const results = await db.query(command, value);
       if (results.rows?.length) {
@@ -59,13 +61,13 @@ module.exports = class CartItemModel {
     }
   }
 
-  async findManyByCartId(id) {
+  async findManyByUserId(id) {
     try {
-      const command = "SELECT * FROM cart_items WHERE cart_id = $1";
-      const value = [id];
+      const command = "SELECT * FROM order_items WHERE user_id = $1";
+      value = [id];
       const results = await db.query(command, value);
       if (results.rows?.length) {
-        return results.rows;
+        return results.rows[0];
       }
       return null;
     } catch (err) {
@@ -73,11 +75,11 @@ module.exports = class CartItemModel {
     }
   }
 
-  async deleteById(id) {
+  async deleteOneById(id) {
     try {
-      const command = "DELETE FROM cart_items WHERE id = $1";
-      const value = [id];
-      const results = db.query(command, value);
+      const command = "DELETE FROM order_items WHERE id = $1";
+      value = [id];
+      const results = await db.query(command, value);
       if (results.rows?.length) {
         return results.rows[0];
       }

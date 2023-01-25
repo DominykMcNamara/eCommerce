@@ -51,6 +51,7 @@ const pg = require("pg");
         id INT  PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
         user_id INT NOT NULL,
+        is_active BOOLEAN DEFAULT true,
         FOREIGN KEY (user_id) REFERENCES Users(id)
     );`;
 

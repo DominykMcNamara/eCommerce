@@ -19,7 +19,8 @@ const pg = require("pg");
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
         name VARCHAR(50) NOT NULL,
         price BIGINT NOT NULL ,
-        description VARCHAR(100)
+        description VARCHAR(100),
+        image VARCHAR(100)
     );`;
 
   const ordersTable = `

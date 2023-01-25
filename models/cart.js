@@ -6,6 +6,19 @@ module.exports = class CartModel {
     this.isActive = data.isActive || true;
   }
 
+  async findAll() {
+    try {
+      const command = "SELECT * FROM carts";
+      const results = db.query(command);
+      if (results.rows?.length) {
+        return results.rows;
+      }
+      return null;
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
   async create(userId) {
     try {
       const data = { userId, ...this };
@@ -65,15 +78,15 @@ module.exports = class CartModel {
 
   async deleteById(id) {
     try {
-        const command = "DELETE FROM carts WHERE id = $1"
-        const value = [id]
-        const results = db.query(command, value)
-        if (results.rows?.length) {
-            return results.rows[0]
-        }
-        return null
-    } catch(err) {
-        throw new Error(err)
+      const command = "DELETE FROM carts WHERE id = $1";
+      const value = [id];
+      const results = db.query(command, value);
+      if (results.rows?.length) {
+        return results.rows[0];
+      }
+      return null;
+    } catch (err) {
+      throw new Error(err);
     }
   }
 };

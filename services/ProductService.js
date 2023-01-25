@@ -30,20 +30,29 @@ module.exports = class ProductService {
 
   async updateOne(data) {
     try {
-        const updateProduct = await ProductModelInstance.update(data)
-        return updateProduct
+      const updateProduct = await ProductModelInstance.update(data);
+      return updateProduct;
     } catch (err) {
-        throw err
+      throw err;
     }
   }
 
   async deleteOne(data) {
-    const { id } = data
+    const { id } = data;
     try {
-        const productToDelete = await ProductModelInstance.deleteById(id)
-        return productToDelete
+      const productToDelete = await ProductModelInstance.deleteById(id);
+      return productToDelete;
     } catch (err) {
-        throw err
+      throw err;
+    }
+  }
+
+  async createProduct(data) {
+    try {
+      const newProduct = await ProductModelInstance.create(data);
+      return newProduct;
+    } catch (err) {
+      throw err;
     }
   }
 };

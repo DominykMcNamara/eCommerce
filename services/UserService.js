@@ -20,7 +20,7 @@ module.exports = class UserService {
     try {
       const user = await UserModelInstance.findOneById(id);
       if (!user) {
-        throw (createError(404), "User does not exist.");
+        throw createError(404, "User does not exist.");
       }
       return user;
     } catch (err) {
@@ -37,7 +37,8 @@ module.exports = class UserService {
     }
   }
 
-  async deleteOne(id) {
+  async deleteOne(data) {
+    const { id } = data
     try {
       const userToDelete = await UserModelInstance.deleteUserById(id);
       return userToDelete;

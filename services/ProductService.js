@@ -30,8 +30,11 @@ module.exports = class ProductService {
 
   async updateOne(data) {
     try {
-      const updateProduct = await ProductModelInstance.update(data);
-      return updateProduct;
+      const updatedProduct = await ProductModelInstance.update(data);
+      if (!updatedProduct) {
+        throw createError(404, "Product does not exist.")
+      }
+      return updatedProduct;
     } catch (err) {
       throw err;
     }
@@ -41,6 +44,9 @@ module.exports = class ProductService {
     const { id } = data;
     try {
       const productToDelete = await ProductModelInstance.deleteById(id);
+      if (!productToDelete) {
+        throw createError(404, "Product does not exist.")
+      }
       return productToDelete;
     } catch (err) {
       throw err;
@@ -50,6 +56,9 @@ module.exports = class ProductService {
   async createProduct(data) {
     try {
       const newProduct = await ProductModelInstance.create(data);
+      if (!newProduct) {
+        throw createError(500, "Order could not be created.") 
+     }
       return newProduct;
     } catch (err) {
       throw err;

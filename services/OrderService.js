@@ -4,7 +4,7 @@ const OrderModelInstance = new OrderModel()
 module.exports = class OrderService {
   async getAll() {
     try {
-      orders = await await OrderModelInstance.findAll();
+      orders = await OrderModelInstance.findAll();
       if (!orders) {
         throw createError(404, "No orders exist.");
       }
@@ -42,7 +42,6 @@ module.exports = class OrderService {
 
   async update(data) {
     try {
-      console.log(data)
       const updatedOrder = await OrderModelInstance.update(data);
       if (!updatedOrder) {
         throw createError(404, "Order does not exist.");

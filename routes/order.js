@@ -9,7 +9,6 @@ module.exports = (app) => {
 
   router.get("/myOrders", async (req, res, next) => {
     try {
-      console.log(req.user.id)
       const response = await OrderServiceInstance.getManyByUserId({ id: req.user.id});
       res.status(200).send(response);
     } catch (err) {

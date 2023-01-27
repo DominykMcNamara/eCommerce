@@ -9,9 +9,8 @@ module.exports = (app) => {
 
   router.get("/myOrders", async (req, res, next) => {
     try {
-      const response = await OrderServiceInstance.getManyByUserId({
-        id: req.user,
-      });
+      console.log(req.user.id)
+      const response = await OrderServiceInstance.getManyByUserId({ id: req.user.id});
       res.status(200).send(response);
     } catch (err) {
       next(err);
@@ -51,11 +50,15 @@ module.exports = (app) => {
 
   router.post("/", async (req, res, next) => {
     try {
-        const { data } = req.body
-        const response = await OrderServiceInstance.createOrder(data)
-        res.status(200).send(response)
+      const  data  = req.body;
+      const response = await OrderServiceInstance.createOrder({
+        total: data.total,
+        status: data.status,
+        user_id: req.user.id,
+      });
+      res.status(200).send(response);
     } catch (err) {
-        next(err)
+      next(err);
     }
-  })
+  });
 };

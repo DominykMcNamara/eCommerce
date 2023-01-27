@@ -44,9 +44,6 @@ module.exports = class ProductService {
     const { id } = data;
     try {
       const productToDelete = await ProductModelInstance.deleteById(id);
-      if (!productToDelete) {
-        throw createError(404, "Product does not exist.")
-      }
       return productToDelete;
     } catch (err) {
       throw err;

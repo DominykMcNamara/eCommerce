@@ -1,11 +1,10 @@
 const createError = require("http-errors");
 const OrderModel = require("../models/order");
-const OrderItemsModel = require("../models/orderItems");
-
+const OrderModelInstance = new OrderModel()
 module.exports = class OrderService {
   async getAll() {
     try {
-      orders = await await OrderModel.findAll();
+      orders = await await OrderModelInstance.findAll();
       if (!orders) {
         throw createError(404, "No orders exist.");
       }
@@ -18,7 +17,7 @@ module.exports = class OrderService {
   async getOneById(data) {
     const { id } = data;
     try {
-      const order = await OrderModel.findOneById(id);
+      const order = await OrderModelInstance.findOneById(id);
       if (!order) {
         throw createError(404, "Order does not exist.");
       }
@@ -31,7 +30,7 @@ module.exports = class OrderService {
   async getManyByUserId(data) {
     const { id } = data;
     try {
-      const orders = await OrderModel.findManyByUserId(id);
+      const orders = await OrderModelInstance.findManyByUserId(id);
       if (!orders) {
         throw createError(404, "User does not exist");
       }
@@ -43,7 +42,7 @@ module.exports = class OrderService {
 
   async update(data) {
     try {
-      const updatedOrder = await OrderModel.update(data);
+      const updatedOrder = await OrderModelInstance.update(data);
       if (!updatedOrder) {
         throw createError(404, "Order does not exist.");
       }
@@ -57,10 +56,7 @@ module.exports = class OrderService {
     try {
       const { id } = data;
 
-      const order = await OrderModel.deleteOneById(id);
-      if (!order) {
-        throw createError(404, "Order does not exist.");
-      }
+      const order = await OrderModelInstance.deleteOneById(id);
       return order;
     } catch (err) {
       throw err;
@@ -69,13 +65,8 @@ module.exports = class OrderService {
 
   async createOrder(data) {
     try {
-      const { userId, total, status } = data;
-      const Order = new OrderModel();
-      const newOrder = Order.create({
-        user_id: userId,
-        total: total,
-        status: status,
-      });
+    
+      const newOrder = OrderModelInstance.create(data)
       if (!newOrder) {
         throw createError(500, "Order could not be created.");
       }

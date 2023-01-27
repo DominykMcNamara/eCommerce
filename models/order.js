@@ -45,7 +45,12 @@ module.exports = class OrderModel {
 
   async create(data) {
     try {
-      const command = pgp.helpers.insert(data, null, "orders") + "RETURNING *";
+      const newOrder = {
+        total: data.total,
+        status: data.status,
+        user_id: data.user_id
+      }
+      const command = pgp.helpers.insert(newOrder, null, "orders") + "RETURNING *";
       const results = db.query(command);
       if (results.rows?.length) {
         return results.rows[0];

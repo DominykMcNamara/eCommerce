@@ -44,9 +44,6 @@ module.exports = class UserService {
     const { id } = data
     try {
       const userToDelete = await UserModelInstance.deleteUserById(id);
-      if (!userToDelete) {
-        throw createError(404, "User does not exist")
-      }
       return userToDelete;
     } catch (err) {
       throw err;

@@ -29,8 +29,9 @@ module.exports = (app) => {
   router.patch("/:id", async (req, res, next) => {
     try {
       const { id } = req.params;
-      const { data } = req.body;
-      const response = await UserServiceInstance.updateOne({ id: id, ...data });
+      const  data  = req.body;
+      console.log(data)
+      const response = await UserServiceInstance.updateOne({ id: id, ...data});
       res.status(200).send(response);
     } catch (err) {
       next(err);

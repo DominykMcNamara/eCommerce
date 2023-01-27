@@ -42,6 +42,7 @@ module.exports = class OrderService {
 
   async update(data) {
     try {
+      console.log(data)
       const updatedOrder = await OrderModelInstance.update(data);
       if (!updatedOrder) {
         throw createError(404, "Order does not exist.");

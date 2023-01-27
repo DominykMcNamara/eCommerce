@@ -29,6 +29,7 @@ module.exports = class ProductModel {
       const findProduct = pgp.as.format("WHERE id = ${id} RETURNING *", { id });
       const command =
         pgp.helpers.update(params, null, "products") + findProduct;
+        const results = await db.query(command)
       if (results.rows?.length) {
         return results.rows[0];
       }

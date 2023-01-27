@@ -28,7 +28,7 @@ module.exports = (app) => {
   router.patch("/:id", async (req, res, next) => {
     try {
       const { id } = req.params;
-      const { data } = req.body;
+      const data  = req.body;
       const response = await ProductServiceInstance.updateOne({
         id: id,
         ...data,

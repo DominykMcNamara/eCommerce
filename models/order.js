@@ -51,7 +51,7 @@ module.exports = class OrderModel {
         user_id: data.user_id
       }
       const command = pgp.helpers.insert(newOrder, null, "orders") + "RETURNING *";
-      const results = db.query(command);
+      const results = await db.query(command);
       if (results.rows?.length) {
         return results.rows[0];
       }
@@ -63,10 +63,11 @@ module.exports = class OrderModel {
 
   async update(data) {
     const { id, ...params } = data;
+    
     try {
       const findOrder = pgp.as.format("WHERE id = ${id} RETURNING *", { id });
       const command = pgp.helpers.update(params, null, "orders") + findOrder;
-      const results = db.query(command);
+      const results = await db.query(command);
       if (results.rows?.length) {
         return results.rows[0];
       }
@@ -80,7 +81,7 @@ module.exports = class OrderModel {
     try {
       const command = "DELETE FROM orders WHERE id = $1";
       const values = [id];
-      const results = db.query(command, values);
+      const results = await db.query(command, values);
       if (results.rows?.length) {
         return results.rows[0];
       }

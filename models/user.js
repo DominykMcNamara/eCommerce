@@ -25,10 +25,15 @@ module.exports = class UserModel {
   }
 
   async update(data) {
+    const { id, ...params } = data;
+    const updatedUser = {
+      username: params.username,
+      password: await bcrypt.hash(params.password, 10),
+    };
+
     try {
-      const { id, ...params } = data;
       const findUser = pgp.as.format("WHERE id = ${id} RETURNING *", { id });
-      const command = pgp.helpers.update(params, null, "users") + findUser;
+      const command = pgp.helpers.update(updatedUser, null, "users") + findUser;
       const results = await db.query(command);
       if (results.rows?.length) {
         return results.rows[0];

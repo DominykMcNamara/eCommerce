@@ -48,9 +48,10 @@ module.exports = class OrderModel {
       const newOrder = {
         total: data.total,
         status: data.status,
-        user_id: data.user_id
-      }
-      const command = pgp.helpers.insert(newOrder, null, "orders") + "RETURNING *";
+        user_id: data.user_id,
+      };
+      const command =
+        pgp.helpers.insert(newOrder, null, "orders") + "RETURNING *";
       const results = await db.query(command);
       if (results.rows?.length) {
         return results.rows[0];
@@ -63,7 +64,6 @@ module.exports = class OrderModel {
 
   async update(data) {
     const { id, ...params } = data;
-    
     try {
       const findOrder = pgp.as.format("WHERE id = ${id} RETURNING *", { id });
       const command = pgp.helpers.update(params, null, "orders") + findOrder;

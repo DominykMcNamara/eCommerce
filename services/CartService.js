@@ -45,7 +45,7 @@ module.exports = class CartService {
     try {
       const updatedCart = await CartModelInstance.update(data);
       if (!updatedCart) {
-        throw createError(404, "Cart does not exis.");
+        throw createError(404, "Cart does not exist.");
       }
       return updatedCart;
     } catch (err) {
@@ -66,7 +66,7 @@ module.exports = class CartService {
   async createCart(data) {
     try {
       const newCart = CartModelInstance.create(data);
-      if (!newOrder) {
+      if (!newCart) {
         throw createError(500, "Order could not be created.");
       }
       return newCart;

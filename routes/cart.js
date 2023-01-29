@@ -21,7 +21,7 @@ module.exports = (app) => {
   router.get("/:id", async (req, res, next) => {
     try {
       const { id } = req.params;
-      const response = CartServiceInstance.getOneById({ id: id });
+      const response = await CartServiceInstance.getOneById({ id: id });
       res.status(200).send(response);
     } catch (err) {
       next(err);
@@ -32,7 +32,7 @@ module.exports = (app) => {
     try {
       const { id } = req.params;
       const data = req.body;
-      const response = await CartServiceInstance.update({ id: id, ...data });
+      const response = await CartServiceInstance.update({ id: id, is_active: data.is_active });
       res.status(200).send(response);
     } catch (err) {
       next(err);

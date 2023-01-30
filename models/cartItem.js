@@ -45,7 +45,7 @@ module.exports = class CartItemModel {
     }
   }
 
-  async findOneById(id) {
+  /* async findOneById(id) {
     try {
       const command = "SELECT * FROM cart_items WHERE id = $1";
       const value = [id];
@@ -57,11 +57,12 @@ module.exports = class CartItemModel {
     } catch (err) {
       throw new Error(err);
     }
-  }
+  } */
 
-  async findManyByCartId(id) {
+  async findById(id) {
     try {
-      const command = "SELECT * FROM cart_items WHERE cart_id = $1";
+      const command =
+        "cart_items.id, cart_items.quantity, cart_items.product_id FROM cart_items INNER JOIN products ON products.id = cart_items.id WHERE cart_items.id = $1";
       const value = [id];
       const results = await db.query(command, value);
       if (results.rows?.length) {
@@ -75,7 +76,7 @@ module.exports = class CartItemModel {
 
   async deleteById(id) {
     try {
-      const command = "DELETE FROM cart_items WHERE id = $1";
+      const command = "DELETE FROM cart_items WHERE id = $1 RETURNING *";
       const value = [id];
       const results = db.query(command, value);
       if (results.rows?.length) {

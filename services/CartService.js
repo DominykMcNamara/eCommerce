@@ -1,6 +1,9 @@
 const createError = require("http-errors");
+const stripe = require("stripe")(process.env.STRIPE_KEY)
 const CartModel = require("../models/cart");
 const CartModelInstance = new CartModel();
+const CartItemModel = require('../models/cartItem')
+const OrderModel = require("../models/order")
 
 module.exports = class CartService {
   async getAll() {
@@ -73,5 +76,9 @@ module.exports = class CartService {
     } catch (err) {
       throw err;
     }
+  }
+
+  async checkout(data) {
+    const {cartId, userId, payment } = data
   }
 };

@@ -79,7 +79,7 @@ module.exports = class OrderModel {
 
   async deleteOneById(id) {
     try {
-      const command = "DELETE FROM orders WHERE id = $1";
+      const command = "DELETE FROM orders WHERE id = $1 returning *";
       const values = [id];
       const results = await db.query(command, values);
       if (results.rows?.length) {

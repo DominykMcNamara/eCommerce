@@ -45,24 +45,10 @@ module.exports = class CartItemModel {
     }
   }
 
-  /* async findOneById(id) {
-    try {
-      const command = "SELECT * FROM cart_items WHERE id = $1";
-      const value = [id];
-      const results = await db.query(command, value);
-      if (results.rows?.length) {
-        return results.rows[0];
-      }
-      return null;
-    } catch (err) {
-      throw new Error(err);
-    }
-  } */
-
-  async findById(id) {
+  async findByCartId(id) {
     try {
       const command =
-        "cart_items.id, cart_items.quantity, cart_items.product_id FROM cart_items INNER JOIN products ON products.id = cart_items.id WHERE cart_items.id = $1";
+        "SELECT cart_items.id, cart_items.quantity, products.* FROM cart_items INNER JOIN products ON products.id = cart_items.product_id WHERE cart_items.cart_id = $1";
       const value = [id];
       const results = await db.query(command, value);
       if (results.rows?.length) {

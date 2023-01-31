@@ -47,9 +47,9 @@ module.exports = class OrderItem {
     }
   }
 
-  async findOneById(id) {
+  async findOneByOrderId(id) {
     try {
-      const command = "SELECT * FROM order_items WHERE id = $1";
+      const command = "SELECT order_items.id, order_items.quantity, products.* FROM order_items INNER JOIN products ON products.id = order_items.product_id WHERE order_items.order_id = $1";
       const value = [id];
       const results = await db.query(command, value);
       if (results.rows?.length) {

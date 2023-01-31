@@ -5,7 +5,7 @@ const pg = require("pg");
   const usersTable = `
     CREATE TABLE IF NOT EXISTS Users (
         id INT  PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
-        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        created_at DATE NOT NULL,
         email VARCHAR(100)  NOT NULL UNIQUE,
         username VARCHAR(50) NOT NULL UNIQUE,
         password VARCHAR(100) NOT NULL,
@@ -16,7 +16,7 @@ const pg = require("pg");
   const productsTable = ` 
         CREATE TABLE IF NOT EXISTS Products (
         id INT  PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
-        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        created_at DATE NOT NULL,
         name VARCHAR(50) NOT NULL,
         price BIGINT NOT NULL ,
         description VARCHAR(100),
@@ -26,7 +26,7 @@ const pg = require("pg");
   const ordersTable = `
     CREATE TABLE IF NOT EXISTS Orders (
         id INT  PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
-        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        created_at DATE NOT NULL,
         total BIGINT NOT NULL,
         status VARCHAR(50),
         user_id INT NOT NULL,
@@ -36,7 +36,7 @@ const pg = require("pg");
   const orderItemsTable = `
         CREATE TABLE IF NOT EXISTS Order_items (
         id INT  PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
-        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        created_at DATE NOT NULL,
         order_id INT NOT NULL,
         quantity INT NOT NULL,
         price BIGINT NOT NULL,
@@ -49,7 +49,7 @@ const pg = require("pg");
   const cartsTable = `
     CREATE TABLE IF NOT EXISTS Carts (
         id INT  PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
-        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        created_at DATE NOT NULL,
         user_id INT NOT NULL,
         is_active BOOLEAN DEFAULT true,
         FOREIGN KEY (user_id) REFERENCES Users(id)
@@ -59,7 +59,7 @@ const pg = require("pg");
         CREATE TABLE IF NOT EXISTS Cart_items (
         id INT  PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
         cart_id INT NOT NULL,
-        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        created_at DATE NOT NULL,
         product_id INT NOT NULL,
         quantity INT NOT NULL,
         FOREIGN KEY (cart_id) REFERENCES Carts(id),

@@ -49,7 +49,7 @@ module.exports = class CartModel {
       const value = [id];
       const results = await db.query(command, value);
       if (results.rows?.length) {
-        return results.rows[0];
+        return results.rows;
       }
       return null;
     } catch (err) {
@@ -73,7 +73,7 @@ module.exports = class CartModel {
 
   async deleteById(id) {
     try {
-      const command = "DELETE FROM carts WHERE id = $1";
+      const command = "DELETE FROM carts WHERE id = $1 RETURNING *";
       const value = [id];
       const results = db.query(command, value);
       if (results.rows?.length) {

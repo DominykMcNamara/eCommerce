@@ -1,18 +1,18 @@
 const db = require("../db");
 const pgp = require("pg-promise")({ capSQL: true });
+const moment = require("moment");
 const bcrypt = require("bcrypt");
 module.exports = class UserModel {
+  constructor(data = {}) {
+    this.first_name = data.first_name;
+    this.last_name = data.last_name;
+    this.username = data.username;
+    this.password = data.password;
+    this.email = data.email;
+  }
   async create(data) {
     try {
-      const newUser = {
-        first_name: data.first_name,
-        last_name: data.last_name,
-        username: data.username,
-        password: await bcrypt.hash(data.password, 10),
-        email: data.email,
-      };
-      const command =
-        pgp.helpers.insert(newUser, null, "users") + "RETURNING *";
+      const command = pgp.helpers.insert(data, null, "users") + "RETURNING *";
       const results = await db.query(command);
 
       if (results.rows?.length) {

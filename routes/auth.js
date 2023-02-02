@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const bcrypt = require("bcrypt");
 const AuthService = require("../services/AuthService");
 const AuthServiceInstance = new AuthService();
 
@@ -8,6 +9,7 @@ module.exports = (app, passport) => {
 
   router.post("/register", async (req, res, next) => {
     try {
+      req.body.password = await bcrypt.hash(req.body.password, 10);
       const data = req.body;
       const response = await AuthServiceInstance.register(data);
       res.status(200).send(response);

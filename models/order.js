@@ -4,7 +4,7 @@ const pgp = require("pg-promise")({ capSQL: true });
 module.exports = class OrderModel {
   constructor(data = {}) {
     this.total = data.total
-    this.status = data.status || "Unpaid"
+    this.status = data.status
     this.user_id = data.user_id
   }
   async findAll() {

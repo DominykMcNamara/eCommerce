@@ -1,12 +1,19 @@
 const db = require("../db");
 const pgp = require("pg-promise")({ capSQL: true });
+const OrderItem = require('./orderItem')
 
 module.exports = class OrderModel {
   constructor(data = {}) {
-    this.total = data.total
-    this.status = data.status
+    this.total = data.total || 0
+    this.status = data.status || 'Unpaid'
+    this.items = data.items || []
     this.user_id = data.user_id
   }
+
+  async addOrderItems(items) {
+    this.items = items.map(item => new OrderItem(item))
+  }
+
   async findAll() {
     try {
       const command = "SELECT * FROM orders";

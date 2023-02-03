@@ -2,6 +2,11 @@ const db = require("../db");
 const pgp = require("pg-promise")({ capSQL: true });
 
 module.exports = class OrderModel {
+  constructor(data = {}) {
+    this.total = data.total
+    this.status = data.status || "Unpaid"
+    this.user_id = data.user_id
+  }
   async findAll() {
     try {
       const command = "SELECT * FROM orders";
@@ -45,13 +50,8 @@ module.exports = class OrderModel {
 
   async create(data) {
     try {
-      const newOrder = {
-        total: data.total,
-        status: data.status,
-        user_id: data.user_id,
-      };
       const command =
-        pgp.helpers.insert(newOrder, null, "orders") + "RETURNING *";
+        pgp.helpers.insert(data, null, "orders") + "RETURNING *";
       const results = await db.query(command);
       if (results.rows?.length) {
         return results.rows[0];

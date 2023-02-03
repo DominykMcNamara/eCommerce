@@ -1,6 +1,6 @@
 const db = require("../db");
 const pgp = require("pg-promise")({ capSQL: true });
-const moment = require("moment");
+
 const bcrypt = require("bcrypt");
 module.exports = class UserModel {
   constructor(data = {}) {

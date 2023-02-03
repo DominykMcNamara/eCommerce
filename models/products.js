@@ -2,16 +2,16 @@ const db = require("../db");
 const pgp = require("pg-promise")({ capSQL: true });
 
 module.exports = class ProductModel {
+  constructor(data = {}) {
+    this.name = data.name
+    this.price = data.price
+    this.description = data.description
+    this.image = data.image
+  }
   async create(data) {
     try {
-      const newProduct = {
-        name: data.name,
-        price: data.price,
-        description: data.description,
-        image: data.image,
-      };
       const command =
-        pgp.helpers.insert(newProduct, null, "products") + "RETURNING *";
+        pgp.helpers.insert(data, null, "products") + "RETURNING *";
       const results = await db.query(command);
 
       if (results.rows?.length) {

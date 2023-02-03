@@ -2,6 +2,11 @@ const db = require("../db");
 const pgp = require("pg-promise")({ capSQL: true });
 
 module.exports = class CartItemModel {
+  constructor(data = {}) {
+    this.cart_id = data.cart_id
+    this.product_id = data.product_id
+    this.quantity = data.quantity || 1
+  }
   async getAll() {
     try {
       const command = "SELECT * FROM cart_items";

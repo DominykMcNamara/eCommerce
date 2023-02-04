@@ -3,7 +3,6 @@ const pgp = require("pg-promise")({ capSQL: true });
 
 module.exports = class CartModel {
   constructor(data = {}) {
-    this.user_id = data.user_id
     this.is_active = true
   }
   async findAll() {
@@ -19,12 +18,14 @@ module.exports = class CartModel {
     }
   }
 
-  async create(data) {
+  async create(user_id) {
+    
     try {
+      const data = { user_id, ...this}
       const command = pgp.helpers.insert(data, null, "carts") + "RETURNING *";
       const results = await db.query(command);
       if (results.rows?.length) {
-        return results.rows[0];
+        return results.rows;
       }
       return null;
     } catch (err) {
@@ -53,7 +54,7 @@ module.exports = class CartModel {
       const value = [id];
       const results = await db.query(command, value);
       if (results.rows?.length) {
-        return results.rows;
+        return results.rows[0];
       }
       return null;
     } catch (err) {
@@ -77,9 +78,9 @@ module.exports = class CartModel {
 
   async deleteById(id) {
     try {
-      const command = "DELETE FROM carts WHERE id = $1 RETURNING *";
+      const command = "DELETE FROM carts WHERE user_id = $1 RETURNING *";
       const value = [id];
-      const results = db.query(command, value);
+      const results = await db.query(command, value);
       if (results.rows?.length) {
         return results.rows[0];
       }

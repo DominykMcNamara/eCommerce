@@ -9,9 +9,7 @@ module.exports = (app) => {
 
   router.get("/myCarts", async (req, res, next) => {
     try {
-      const response = await CartServiceInstance.getManyByUserId({
-        id: req.user.id,
-      });
+      const response = await CartServiceInstance.getCart({ user_id: req.user.id})
       res.status(200).send(response);
     } catch (err) {
       next(err);
@@ -39,10 +37,9 @@ module.exports = (app) => {
     }
   });
 
-  router.delete("/:id", async (req, res, next) => {
+  router.delete("/myCarts", async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const response = CartServiceInstance.deleteOne({ id: id });
+      const response = await CartServiceInstance.deleteOne({ user_id: req.user.id });
       res.status(200).send(response);
     } catch (err) {
       next(err);
@@ -52,7 +49,7 @@ module.exports = (app) => {
   router.post("/", async (req, res, next) => {
     try {
       const data = req.body;
-      const response = CartServiceInstance.createCart({
+      const response =  await CartServiceInstance.createCart({
         user_id: req.user.id,
       });
       res.status(200).send(response);
@@ -60,4 +57,13 @@ module.exports = (app) => {
       next(err);
     }
   });
+
+  router.post("/items", async (req, res, next) => {
+    try {
+      const { user_id } = req.user.id
+      const data = req.body
+    } catch (err) {
+      next(err)
+    }
+  })
 };

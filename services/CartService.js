@@ -1,9 +1,10 @@
 const createError = require("http-errors");
-const stripe = require("stripe")(process.env.STRIPE_KEY)
+const stripe = require("stripe")(process.env.STRIPE_KEY);
 const CartModel = require("../models/cart");
 const CartModelInstance = new CartModel();
-const CartItemModel = require('../models/cartItem')
-const OrderModel = require("../models/order")
+const CartItemModel = require("../models/cartItem");
+const CartItemModelInstance = new CartItemModel();
+const OrderModel = require("../models/order");
 
 module.exports = class CartService {
   async getAll() {
@@ -31,14 +32,16 @@ module.exports = class CartService {
     }
   }
 
-  async getManyByUserId(data) {
-    const { id } = data;
+  async getCart(data) {
+    const { user_id } = data;
     try {
-      const carts = await CartModelInstance.findOneByUserId(id);
-      if (!carts) {
+      const cart = await CartModelInstance.findOneByUserId(user_id);
+      const items = await CartItemModelInstance.findByCartId(cart.id)
+      cart.items = items
+      if (!cart) {
         throw createError(404, "Cart does not exist.");
       }
-      return carts;
+      return cart;
     } catch (err) {
       throw err;
     }
@@ -58,8 +61,11 @@ module.exports = class CartService {
 
   async deleteOne(data) {
     try {
-      const { id } = data;
-      const cart = await CartModelInstance.deleteById(id);
+      const { user_id } = data;
+      const cart = await CartModelInstance.deleteById(user_id);
+      if (!cart) {
+        throw createError(404, 'Cart does not exist.')
+      }
       return cart;
     } catch (err) {
       throw err;
@@ -67,18 +73,20 @@ module.exports = class CartService {
   }
 
   async createCart(data) {
+    const { user_id } = data;
     try {
-      const newCart = CartModelInstance.create(data);
-      if (!newCart) {
-        throw createError(500, "Order could not be created.");
+      const cartExists = await CartModelInstance.findOneByUserId(user_id)
+      if (cartExists) {
+        throw createError(409, "User cart exists");
       }
-      return newCart;
+       return await CartModelInstance.create(user_id);
+     
     } catch (err) {
       throw err;
     }
   }
 
   async checkout(data) {
-    const {cartId, userId, payment } = data
+    const { cartId, userId, payment } = data;
   }
 };

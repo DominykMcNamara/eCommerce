@@ -1,9 +1,9 @@
 const db = require("../db");
+const cart = require("../routes/cart");
 const pgp = require("pg-promise")({ capSQL: true });
 
 module.exports = class CartItemModel {
   constructor(data = {}) {
-    this.cart_id = data.cart_id
     this.product_id = data.product_id
     this.quantity = data.quantity || 1
   }
@@ -65,17 +65,18 @@ module.exports = class CartItemModel {
     }
   }
 
-  async deleteById(id) {
+  async deleteCartItem(cart_id, product_id) {
+    
     try {
-      const command = "DELETE FROM cart_items WHERE id = $1 RETURNING *";
-      const value = [id];
-      const results = db.query(command, value);
+      const command = "DELETE FROM cart_items WHERE cart_id = $1 AND product_id = $2 RETURNING *"
+      const values = [cart_id, product_id]
+      const results = await db.query(command, values)
       if (results.rows?.length) {
-        return results.rows[0];
+        return results.rows[0]
       }
-      return null;
+      return null
     } catch (err) {
-      throw new Error(err);
+      throw new Error(err)
     }
   }
 };

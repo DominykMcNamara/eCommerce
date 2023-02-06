@@ -19,25 +19,12 @@ module.exports = class CartService {
     }
   }
 
-  async getOneById(data) {
-    const { id } = data;
-    try {
-      const cart = await CartModelInstance.findOneById(id);
-      if (!cart) {
-        throw createError(404, "Cart does not exist");
-      }
-      return cart;
-    } catch (err) {
-      throw err;
-    }
-  }
-
   async getCart(data) {
     const { user_id } = data;
     try {
       const cart = await CartModelInstance.findOneByUserId(user_id);
-      const items = await CartItemModelInstance.findByCartId(cart.id)
-      cart.items = items
+      const items = await CartItemModelInstance.findByCartId(cart.id);
+      cart.items = items;
       if (!cart) {
         throw createError(404, "Cart does not exist.");
       }
@@ -59,12 +46,12 @@ module.exports = class CartService {
     }
   }
 
-  async deleteOne(data) {
+  async deleteUserCart(data) {
     try {
       const { user_id } = data;
-      const cart = await CartModelInstance.deleteById(user_id);
+      const cart = await CartModelInstance.deleteByUserId(user_id);
       if (!cart) {
-        throw createError(404, 'Cart does not exist.')
+        throw createError(404, "Cart does not exist.");
       }
       return cart;
     } catch (err) {
@@ -75,12 +62,37 @@ module.exports = class CartService {
   async createCart(data) {
     const { user_id } = data;
     try {
-      const cartExists = await CartModelInstance.findOneByUserId(user_id)
+      const cartExists = await CartModelInstance.findOneByUserId(user_id);
       if (cartExists) {
         throw createError(409, "User cart exists");
       }
-       return await CartModelInstance.create(user_id);
-     
+      return await CartModelInstance.create(user_id);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async createCartItem(user_id, data) {
+    try {
+      const cart = await CartModelInstance.findOneByUserId(user_id);
+      const cartItem = await CartItemModelInstance.create({
+        cart_id: cart.id,
+        ...data,
+      });
+      return cartItem;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async deleteCartItem(data, product_id) {
+    try {
+      const cart = await CartModelInstance.findOneByUserId(data);
+      const cartItem = await CartItemModelInstance.deleteCartItem(
+        cart.id,
+        product_id
+      );
+      return cartItem;
     } catch (err) {
       throw err;
     }

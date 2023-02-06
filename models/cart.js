@@ -62,21 +62,7 @@ module.exports = class CartModel {
     }
   }
 
-  async findOneById(id) {
-    try {
-      const command = "SELECT * FROM carts WHERE id = $1";
-      const value = [id];
-      const results = await db.query(command, value);
-      if (results.rows?.length) {
-        return results.rows[0];
-      }
-      return null;
-    } catch (err) {
-      throw new Error(err);
-    }
-  }
-
-  async deleteById(id) {
+   async deleteByUserId(id) {
     try {
       const command = "DELETE FROM carts WHERE user_id = $1 RETURNING *";
       const value = [id];

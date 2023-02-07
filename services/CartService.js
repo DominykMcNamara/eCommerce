@@ -34,17 +34,19 @@ module.exports = class CartService {
     }
   }
 
-  async update(data) {
+  async updateCartItem(id, data) {
     try {
-      const updatedCart = await CartModelInstance.update(data);
-      if (!updatedCart) {
-        throw createError(404, "Cart does not exist.");
+      const updatedCartItem = await CartItemModelInstance.update(id, data);
+      if (!updatedCartItem) {
+        throw createError(404, "Item does not exist.");
       }
-      return updatedCart;
+      return updatedCartItem;
     } catch (err) {
       throw err;
     }
   }
+
+
 
   async deleteUserCart(data) {
     try {

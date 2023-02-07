@@ -18,14 +18,11 @@ module.exports = (app) => {
     }
   });
 
-  router.patch("/:id", async (req, res, next) => {
+  router.patch("/myCarts/:id", async (req, res, next) => {
     try {
       const { id } = req.params;
       const data = req.body;
-      const response = await CartServiceInstance.update({
-        id: id,
-        is_active: data.is_active,
-      });
+      const response = await CartServiceInstance.updateCartItem(id, data);
       res.status(200).send(response);
     } catch (err) {
       next(err);

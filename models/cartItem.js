@@ -4,8 +4,8 @@ const pgp = require("pg-promise")({ capSQL: true });
 
 module.exports = class CartItemModel {
   constructor(data = {}) {
-    this.product_id = data.product_id
-    this.quantity = data.quantity || 1
+    this.product_id = data.product_id;
+    this.quantity = data.quantity || 1;
   }
   async getAll() {
     try {
@@ -34,12 +34,13 @@ module.exports = class CartItemModel {
     }
   }
 
-  async update(data) {
+  async update(id, data) {
     try {
-      const { id, ...params } = data;
-      const findCartItems = pgp.format("WHERE id = ${id} RETURNING *", { id });
+      const findCartItems = pgp.as.format("WHERE id = ${id} RETURNING *", {
+        id,
+      });
       const command =
-        pgp.helpers.update(params, null, "cart_items") + findCartItems;
+        pgp.helpers.update(data, null, "cart_items") + findCartItems;
       const results = await db.query(command);
       if (results.rows?.length) {
         return results.rows[0];
@@ -66,17 +67,17 @@ module.exports = class CartItemModel {
   }
 
   async deleteCartItem(cart_id, product_id) {
-    
     try {
-      const command = "DELETE FROM cart_items WHERE cart_id = $1 AND product_id = $2 RETURNING *"
-      const values = [cart_id, product_id]
-      const results = await db.query(command, values)
+      const command =
+        "DELETE FROM cart_items WHERE cart_id = $1 AND product_id = $2 RETURNING *";
+      const values = [cart_id, product_id];
+      const results = await db.query(command, values);
       if (results.rows?.length) {
-        return results.rows[0]
+        return results.rows[0];
       }
-      return null
+      return null;
     } catch (err) {
-      throw new Error(err)
+      throw new Error(err);
     }
   }
 };

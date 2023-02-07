@@ -40,6 +40,19 @@ module.exports = (app) => {
     }
   });
 
+  router.delete("/myOrders/:productId", async (req, res, next) => {
+    const { productId } = req.params;
+    try {
+      const response = await OrderServiceInstance.deleteOrderItem(
+        req.user.id,
+        parseInt(productId)
+      );
+      res.status(200).send(response);
+    } catch (err) {
+      next(err);
+    }
+  });
+
   router.post("/", async (req, res, next) => {
     try {
       const data = req.body;

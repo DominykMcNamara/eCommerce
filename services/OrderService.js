@@ -83,4 +83,14 @@ module.exports = class OrderService {
       throw err
     }
   }
+
+  async deleteOrderItem(data, product_id) {
+    try {
+      const order = await OrderModelInstance.findOneByUserId(data)
+      const orderItem = await OrderItemModelInstance.deleteOrderItem(order.id, product_id)
+      return orderItem
+    } catch (err) {
+      throw err
+    }
+  }
 };

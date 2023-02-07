@@ -80,11 +80,11 @@ module.exports = class OrderItem {
     }
   }
 
-  async deleteOneById(id) {
+  async deleteOrderItem(id, product_id) {
     try {
-      const command = "DELETE FROM order_items WHERE id = $1";
-      value = [id];
-      const results = await db.query(command, value);
+      const command = "DELETE FROM order_items WHERE order_id = $1 AND product_id = $2 RETURNING *";
+      const values = [id, product_id];
+      const results = await db.query(command, values);
       if (results.rows?.length) {
         return results.rows[0];
       }

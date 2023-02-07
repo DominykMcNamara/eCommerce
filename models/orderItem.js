@@ -3,12 +3,9 @@ const pgp = require("pg-promise")({ capSQL: true });
 
 module.exports = class OrderItem {
   constructor(data = {}) {
-    this.order_id = data.order_id
-    this.quantity = data.quantity || 1
-    this.price = data.price
     this.product_id = data.product_id
-    this.name = data.name
-    this.description = data.description
+    this.quantity = data.quantity || 1
+   
   }
   async getAll() {
     try {
@@ -37,14 +34,14 @@ module.exports = class OrderItem {
     }
   }
 
-  async update(data) {
+  async update(id, data) {
     try {
-      const { id, ...params } = data;
-      const findOrderItems = pgp.format("WHERE id = ${ id } RETURNING *", {
+      
+      const findOrderItems = pgp.as.format("WHERE id = ${ id } RETURNING *", {
         id,
       });
       const command =
-        pgp.helpers.update(params, null, "order_items") + findOrderItems;
+        pgp.helpers.update(data, null, "order_items") + findOrderItems;
       const results = db.query(command);
       if (results.rows?.length) {
         return results.rows[0];

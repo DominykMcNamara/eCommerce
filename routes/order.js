@@ -9,38 +9,31 @@ module.exports = (app) => {
 
   router.get("/myOrders", async (req, res, next) => {
     try {
-      const response = await OrderServiceInstance.getManyByUserId({ id: req.user.id});
+      const response = await OrderServiceInstance.getOrder({
+        user_id: req.user.id,
+      });
       res.status(200).send(response);
     } catch (err) {
       next(err);
     }
   });
 
-  router.get("/:id", async (req, res, next) => {
+  router.patch("/myOrder/:id", async (req, res, next) => {
     try {
       const { id } = req.params;
-      const response = OrderServiceInstance.getOneById({ id: id });
+      const data = req.body;
+      const response = await OrderServiceInstance.updateOrderItem(id, data);
       res.status(200).send(response);
     } catch (err) {
       next(err);
     }
   });
 
-  router.patch("/:id", async (req, res, next) => {
+  router.delete("/myOrders", async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const  data  = req.body;
-      const response = await OrderServiceInstance.update({ id: id, status: data.status });
-      res.status(200).send(response);
-    } catch (err) {
-      next(err);
-    }
-  });
-
-  router.delete("/:id", async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const response = await OrderServiceInstance.deleteOne({ id: id });
+      const response = await OrderServiceInstance.deleteUserOrder({
+        user_id: req.user.id,
+      });
       res.status(200).send(response);
     } catch (err) {
       next(err);
@@ -49,12 +42,22 @@ module.exports = (app) => {
 
   router.post("/", async (req, res, next) => {
     try {
-      const  data  = req.body;
+      const data = req.body;
       const response = await OrderServiceInstance.createOrder({
         total: data.total,
         status: data.status,
         user_id: req.user.id,
       });
+      res.status(200).send(response);
+    } catch (err) {
+      next(err);
+    }
+  });
+  router.post("/items", async (req, res, next) => {
+    try {
+      const { id } = req.user;
+      const data = req.body;
+      const response = await OrderServiceInstance.createOrderItem(id, data);
       res.status(200).send(response);
     } catch (err) {
       next(err);

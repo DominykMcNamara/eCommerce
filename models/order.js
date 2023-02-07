@@ -27,27 +27,14 @@ module.exports = class OrderModel {
     }
   }
 
-  async findOneById(id) {
-    try {
-      const command = "SELECT * FROM orders WHERE id = $1";
-      const value = [id];
-      const results = await db.query(command, value);
-      if (results.rows?.length) {
-        return results.rows[0];
-      }
-      return null;
-    } catch (err) {
-      throw new Error(err);
-    }
-  }
-
-  async findManyByUserId(id) {
+  async findOneByUserId(id) {
     try {
       const command = "SELECT * FROM orders WHERE user_id = $1";
       const value = [id];
       const results = await db.query(command, value);
+      console.log(results)
       if (results.rows?.length) {
-        return results.rows;
+        return results.rows[0];
       }
       return null;
     } catch (err) {
@@ -69,24 +56,9 @@ module.exports = class OrderModel {
     }
   }
 
-  async update(data) {
-    const { id, ...params } = data;
+  async deleteByUserId(id) {
     try {
-      const findOrder = pgp.as.format("WHERE id = ${id} RETURNING *", { id });
-      const command = pgp.helpers.update(params, null, "orders") + findOrder;
-      const results = await db.query(command);
-      if (results.rows?.length) {
-        return results.rows[0];
-      }
-      return null;
-    } catch (err) {
-      throw new Error(err);
-    }
-  }
-
-  async deleteOneById(id) {
-    try {
-      const command = "DELETE FROM orders WHERE id = $1 returning *";
+      const command = "DELETE FROM orders WHERE user_id = $1 returning *";
       const values = [id];
       const results = await db.query(command, values);
       if (results.rows?.length) {

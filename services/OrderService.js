@@ -1,6 +1,8 @@
 const createError = require("http-errors");
 const OrderModel = require("../models/order");
-const OrderModelInstance = new OrderModel()
+const OrderModelInstance = new OrderModel();
+const OrderItemModel = require("../models/orderItem");
+const OrderItemModelInstance = new OrderItemModel();
 module.exports = class OrderService {
   async getAll() {
     try {
@@ -14,12 +16,15 @@ module.exports = class OrderService {
     }
   }
 
-  async getOneById(data) {
-    const { id } = data;
+  async getOrder(data) {
+    const { user_id } = data;
+
     try {
-      const order = await OrderModelInstance.findOneById(id);
+      const order = await OrderModelInstance.findOneByUserId(user_id);
+      const items = await OrderItemModelInstance.findOneByOrderId(order.id);
+      order.items = items;
       if (!order) {
-        throw createError(404, "Order does not exist.");
+        throw createError(404, "User does not exist");
       }
       return order;
     } catch (err) {
@@ -27,22 +32,9 @@ module.exports = class OrderService {
     }
   }
 
-  async getManyByUserId(data) {
-    const { id } = data;
+  async updateOrderItem(id, data) {
     try {
-      const orders = await OrderModelInstance.findManyByUserId(id);
-      if (!orders) {
-        throw createError(404, "User does not exist");
-      }
-      return orders;
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  async update(data) {
-    try {
-      const updatedOrder = await OrderModelInstance.update(data);
+      const updatedOrder = await OrderModelInstance.update(id, data);
       if (!updatedOrder) {
         throw createError(404, "Order does not exist.");
       }
@@ -52,11 +44,13 @@ module.exports = class OrderService {
     }
   }
 
-  async deleteOne(data) {
+  async deleteUserOrder(data) {
     try {
-      const { id } = data;
-
-      const order = await OrderModelInstance.deleteOneById(id);
+      const { user_id } = data;
+      const order = await OrderModelInstance.deleteByUserId(user_id);
+      if (!order) {
+        throw createError(404, "Order does not exist.");
+      }
       return order;
     } catch (err) {
       throw err;
@@ -64,15 +58,29 @@ module.exports = class OrderService {
   }
 
   async createOrder(data) {
+    const { user_id } = data
     try {
-    
-      const newOrder = OrderModelInstance.create(data)
-      if (!newOrder) {
-        throw createError(500, "Order could not be created.");
+      const orderExists = await OrderModelInstance.findOneByUserId(user_id)
+      if (orderExists) {
+        throw createError(409, "User order exists");
       }
-      return newOrder;
+      return await OrderModelInstance.create(data);
     } catch (err) {
       throw err;
+    }
+  }
+
+  async createOrderItem(user_id, data) {
+    try {
+      const order = await OrderModelInstance.findOneByUserId(user_id)
+      console.log(order)
+      const orderItem = await OrderItemModelInstance.create({
+        order_id: order.id,
+        ...data
+      })
+      return orderItem
+    } catch (err) {
+      throw err
     }
   }
 };

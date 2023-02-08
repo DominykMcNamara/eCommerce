@@ -3,7 +3,7 @@ const OrderModel = require("../models/order");
 const OrderModelInstance = new OrderModel();
 const OrderItemModel = require("../models/orderItem");
 const OrderItemModelInstance = new OrderItemModel();
-module.exports = class OrderService {
+module.exports = class OrderController {
   async getAll() {
     try {
       orders = await OrderModelInstance.findAll();

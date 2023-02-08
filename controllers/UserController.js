@@ -2,7 +2,7 @@ const createError = require("http-errors");
 const UserModel = require("../models/user");
 const UserModelInstance = new UserModel();
 
-module.exports = class UserService {
+module.exports = class UserController {
   async getAll() {
     try {
       const users = await UserModelInstance.findAll();

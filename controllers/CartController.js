@@ -7,7 +7,7 @@ const CartItemModelInstance = new CartItemModel();
 const OrderModel = require("../models/order");
 const OrderModelInstance = new OrderModel();
 
-module.exports = class CartService {
+module.exports = class CartController {
   async getAll() {
     try {
       const carts = await CartModelInstance.findAll();

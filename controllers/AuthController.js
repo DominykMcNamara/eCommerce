@@ -3,7 +3,7 @@ const UserModel = require("../models/user");
 const bcrypt = require("bcrypt");
 const UserModelInstance = new UserModel();
 
-module.exports = class AuthService {
+module.exports = class AuthController {
   async register(data) {
     try {
       const { email } = data;

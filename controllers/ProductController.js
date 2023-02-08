@@ -2,7 +2,7 @@ const createError = require("http-errors");
 const ProductModel = require("../models/products");
 const ProductModelInstance = new ProductModel();
 
-module.exports = class ProductService {
+module.exports = class ProductController {
   async getAll() {
     try {
       const products = await ProductModelInstance.findAll();

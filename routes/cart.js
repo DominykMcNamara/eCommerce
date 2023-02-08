@@ -1,15 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const checkAuthenticated = require("../middleware/isAuthenticated");
-const CartService = require("../services/CartService");
-const CartServiceInstance = new CartService();
+const CartController = require("../controllers/CartController");
+const CartControllerInstance = new CartController();
 
 module.exports = (app) => {
   app.use("/carts", [checkAuthenticated], router);
 
   router.get("/myCarts", async (req, res, next) => {
     try {
-      const response = await CartServiceInstance.getCart({
+      const response = await CartControllerInstance.getCart({
         user_id: req.user.id,
       });
       res.status(200).send(response);
@@ -22,7 +22,7 @@ module.exports = (app) => {
     try {
       const { id } = req.params;
       const data = req.body;
-      const response = await CartServiceInstance.updateCartItem(id, data);
+      const response = await CartControllerInstance.updateCartItem(id, data);
       res.status(200).send(response);
     } catch (err) {
       next(err);
@@ -31,7 +31,7 @@ module.exports = (app) => {
 
   router.delete("/myCarts", async (req, res, next) => {
     try {
-      const response = await CartServiceInstance.deleteUserCart({
+      const response = await CartControllerInstance.deleteUserCart({
         user_id: req.user.id,
       });
       res.status(200).send(response);
@@ -43,7 +43,7 @@ module.exports = (app) => {
   router.delete("/myCarts/:productId", async (req, res, next) => {
     const { productId } = req.params;
     try {
-      const response = await CartServiceInstance.deleteCartItem(
+      const response = await CartControllerInstance.deleteCartItem(
         req.user.id,
         parseInt(productId)
       );
@@ -56,7 +56,7 @@ module.exports = (app) => {
   router.post("/", async (req, res, next) => {
     try {
       const data = req.body;
-      const response = await CartServiceInstance.createCart({
+      const response = await CartControllerInstance.createCart({
         user_id: req.user.id,
       });
       res.status(200).send(response);
@@ -69,7 +69,7 @@ module.exports = (app) => {
     try {
       const { id } = req.user;
       const data = req.body;
-      const response = await CartServiceInstance.createCartItem(id, data);
+      const response = await CartControllerInstance.createCartItem(id, data);
       res.status(200).send(response);
     } catch (err) {
       next(err);
@@ -80,7 +80,7 @@ module.exports = (app) => {
     try {
       const { id } = req.user;
       const { cartId, paymentInfo } = req.body;
-      const response = await CartServiceInstance.checkout(
+      const response = await CartControllerInstance.checkout(
         cartId,
         id,
         paymentInfo

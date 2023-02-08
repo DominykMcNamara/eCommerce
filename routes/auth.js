@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
-const AuthService = require("../services/AuthService");
-const AuthServiceInstance = new AuthService();
+const AuthController = require("../controllers/AuthController");
+const AuthControllerInstance = new AuthController();
 
 module.exports = (app, passport) => {
   app.use("/auth", router);
@@ -11,7 +11,7 @@ module.exports = (app, passport) => {
     try {
       req.body.password = await bcrypt.hash(req.body.password, 10);
       const data = req.body;
-      const response = await AuthServiceInstance.register(data);
+      const response = await AuthControllerInstance.register(data);
       res.status(200).send(response);
     } catch (err) {
       next(err);
@@ -24,7 +24,7 @@ module.exports = (app, passport) => {
     async (req, res, next) => {
       try {
         const { username, password } = req.body;
-        const response = await AuthServiceInstance.login({
+        const response = await AuthControllerInstance.login({
           email: username,
           password: password,
         });

@@ -39,10 +39,7 @@ const pg = require("pg");
         created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
         order_id INT NOT NULL,
         quantity INT NOT NULL,
-        price BIGINT NOT NULL,
         product_id INT NOT NULL,
-        name VARCHAR(50) NOT NULL,
-        description VARCHAR(100) NOT NULL,
         FOREIGN KEY (order_id) REFERENCES Orders(id)
     );`;
 
@@ -51,7 +48,6 @@ const pg = require("pg");
         id INT  PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
         created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
         user_id INT NOT NULL,
-        is_active BOOLEAN DEFAULT true,
         FOREIGN KEY (user_id) REFERENCES Users(id)
     );`;
 

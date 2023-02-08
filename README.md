@@ -4,7 +4,7 @@ Node/Express REST API that provides functionality for an eCommerce website. CRUD
 ## Running the app
 To run locally, 'npm install', then 'npm run dev'
 
-This app includes an 'example.env' file  that contains environment variables for reference. Create a '.env' file that includes all variables found in 'example.env'. Be sure to replace the example values with your specific environment/needs.
+This app includes an 'exampleEnv.txt' file  that contains environment variables for reference. Create a '.env' file that includes all variables found in 'example.env'. Be sure to replace the example values with your specific environment/needs.
 
 This app requires a [PostgreSQL](https://www.postgresql.org/) database to be running on a local machine.
 To load the database run 'npm run buildDb'. The database setup can be viewed in the file 'dbSetup.js'.

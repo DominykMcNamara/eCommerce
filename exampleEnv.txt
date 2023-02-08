@@ -1,0 +1,13 @@
+# Server config
+PORT=3500
+SESSION_SECRET="session_secret"
+
+# Database
+PGHOST="localhost"
+PGUSER="user"
+PGDATABASE="db_name"
+PGPASSWORD="password"
+PGPORT=5432
+
+# Stripe
+STRIPE_KEY="secret_key"

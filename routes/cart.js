@@ -43,7 +43,10 @@ module.exports = (app) => {
   router.delete("/myCarts/:productId", async (req, res, next) => {
     const { productId } = req.params;
     try {
-      const response = await CartServiceInstance.deleteCartItem( req.user.id, parseInt(productId));
+      const response = await CartServiceInstance.deleteCartItem(
+        req.user.id,
+        parseInt(productId)
+      );
       res.status(200).send(response);
     } catch (err) {
       next(err);
@@ -68,6 +71,21 @@ module.exports = (app) => {
       const data = req.body;
       const response = await CartServiceInstance.createCartItem(id, data);
       res.status(200).send(response);
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.post("/myCarts/checkout", async (req, res, next) => {
+    try {
+      const { id } = req.user;
+      const { cartId, paymentInfo } = req.body;
+      const response = await CartServiceInstance.checkout(
+        cartId,
+        id,
+        paymentInfo
+      );
+      res, status(200).send(response);
     } catch (err) {
       next(err);
     }

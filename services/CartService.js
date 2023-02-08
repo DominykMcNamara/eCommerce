@@ -5,6 +5,7 @@ const CartModelInstance = new CartModel();
 const CartItemModel = require("../models/cartItem");
 const CartItemModelInstance = new CartItemModel();
 const OrderModel = require("../models/order");
+const OrderModelInstance = new OrderModel();
 
 module.exports = class CartService {
   async getAll() {
@@ -45,8 +46,6 @@ module.exports = class CartService {
       throw err;
     }
   }
-
-
 
   async deleteUserCart(data) {
     try {
@@ -102,5 +101,27 @@ module.exports = class CartService {
 
   async checkout(data) {
     const { cartId, userId, payment } = data;
+    try {
+      const cartItems = await CartItemModelInstance.findByCartId(cartId);
+      const total = cartItems.reduce((total, item) => {
+        return (total += Number(item.price));
+      }, 0);
+      await OrderModelInstance.create({
+        total: total,
+        user_id: userId,
+        status: "Unpaid",
+      });
+      await OrderModelInstance.addOrderItems(cartItems);
+
+      const charge = await stripe.charges.create({
+        amount: total,
+        currency: "usd",
+        source: payment.id,
+        description: "eCommerce charge",
+      });
+      const order = OrderModelInstance.update(userId, { status: "Paid" });
+    } catch (err) {
+      throw err;
+    }
   }
 };
